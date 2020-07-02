@@ -1,8 +1,9 @@
 class Node():
     def __init__(self, value):
         self.value = value
-        self.leftchild = None 
+        self.leftchild = None
         self.rightchild = None
+
 
 class Tree():
     def __init__(self, value):
@@ -61,14 +62,14 @@ class Tree():
             self.links.append(new_node)
             self.element += 1
             flag = 1
-        
+
         if flag == 1:
             self.height += 1
 
     def insertArray(self, arr):
-        for i in range(2, len(arr), 2):
-            l = arr[i - 2]
-            r = arr[i - 1]
+        for i in range(0, len(arr), 2):
+            l = arr[i]
+            r = arr[i+1]
             self.insertChild(l, r)
 
         if len(arr) % 2 != 0:
@@ -92,9 +93,51 @@ class Tree():
             print(root.value, end=" -> ")
             self.inorder(root.rightchild)
 
+    def func_height(self, root):
+        if root:
+            x = self.func_leaf(root.leftchild)
+            y = self.func_leaf(root.rightchild)
+            if x > y:
+                return x+1
+            else:
+                return y+1
+        else:
+            return 0
+
+    def func_count(self, root):
+        if root:
+            x = self.func_leaf(root.leftchild)
+            y = self.func_leaf(root.rightchild)
+            return x+y+1
+        else:
+            return 0
+
+    def func_leaf(self, root):
+        if root:
+            x = self.func_leaf(root.leftchild)
+            y = self.func_leaf(root.rightchild)
+            if root.leftchild == None and root.rightchild == None:
+                return x+y+1
+            else:
+                return x+y
+        else:
+            return 0
+
+    def func_degree_two_nodes(self, root):
+        if root:
+            x = self.func_leaf(root.leftchild)
+            y = self.func_leaf(root.rightchild)
+            if root.leftchild and root.rightchild:
+                return x+y+1
+            else:
+                return x+y
+        else:
+            return 0
+
+
 if __name__ == "__main__":
     t = Tree("a")
-    t.insertArray(["b", "c", "d", "e", "f", "g", "h"])
+    t.insertArray(["b", "c", "d", "e", "f", "g"])
     print("printing Preorder\n")
     t.preorder(t.root)
     print()
@@ -105,3 +148,8 @@ if __name__ == "__main__":
 
     print("printing Postorder\n")
     t.postorder(t.root)
+    print('\n')
+    print(f"total leaf nodes = {t.func_leaf(t.root)}")
+    print(f"total nodes = {t.func_count(t.root)}")
+    print(f"height  = {t.func_height(t.root)}")
+    print(f"total degree two nodes = {t.func_degree_two_nodes(t.root)}")
